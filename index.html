@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Μηχανική προτροπών: Πληροφορική Α' Γυμνασίου</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            margin: 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: #333; 
+            min-height: 100vh;
+        }
+        .header { 
+            background: rgba(255,255,255,0.95); 
+            padding: 30px; 
+            text-align: center; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            max-width: 1000px; margin-left: auto; margin-right: auto;
+        }
+        .header h1 { 
+            color: #007bff; 
+            margin: 0 0 15px 0; 
+            font-size: 1.8em; 
+            line-height: 1.3;
+        }
+        .header .subtitle {
+            font-size: 1.1em; 
+            color: #2c3e50; 
+            margin: 0 0 10px 0;
+            font-weight: 600;
+        }
+        .header p { 
+            font-size: 1.15em; 
+            color: #555; 
+            margin: 0;
+            font-style: italic;
+        }
+        .tabs-container {
+            max-width: 1000px; margin: 0 auto 30px auto;
+            background: rgba(255,255,255,0.95); 
+            border-radius: 15px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .tab-buttons {
+            display: flex; background: #007bff; margin: 0;
+        }
+        .tab-btn {
+            flex: 1; padding: 15px; background: none; 
+            color: white; border: none; cursor: pointer; 
+            font-size: 1.1em; font-weight: 600;
+            transition: background 0.3s;
+        }
+        .tab-btn.active { background: #0056b3; }
+        .tab-btn:hover { background: rgba(255,255,255,0.2); }
+        .tab-content {
+            padding: 30px; display: none; animation: fadeIn 0.5s;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .w5h { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin: 20px 0; }
+        .w-item { 
+            background: #e3f2fd; 
+            padding: 20px; 
+            text-align: center; 
+            border-radius: 15px; 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .w-item:hover { transform: translateY(-5px); }
+        .w-item h3 { color: #007bff; margin: 0 0 10px 0; font-size: 1.3em; }
+        .example-section {
+            background: #f8f9ff; padding: 25px; margin: 25px 0; 
+            border-radius: 12px; border-left: 6px solid #007bff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .example-section h3 {
+            color: #007bff; margin-top: 0; font-size: 1.4em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .example-bad { 
+            background: #ffebee; 
+            padding: 15px; 
+            border-left: 5px solid #f44336; 
+            margin: 15px 0; 
+            border-radius: 8px;
+        }
+        .example-good { 
+            background: #e8f5e8; 
+            padding: 15px; 
+            border-left: 5px solid #4caf50; 
+            margin: 15px 0; 
+            border-radius: 8px;
+        }
+        .why-bad { font-size: 0.95em; color: #d32f2f; margin-top: 8px; font-style: italic; }
+        button { 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            font-size: 1em; 
+            transition: all 0.3s; 
+            box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+            margin: 10px 5px;
+        }
+        button:hover { background: #0056b3; transform: translateY(-2px); }
+		.simulator {
+            margin-top: 10px;
+        }
+        .sim-chat {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 12px;
+            height: 260px;
+            overflow-y: auto;
+            font-family: "Fira Code", monospace;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+        }
+        .sim-message {
+            margin: 8px 0;
+            padding: 8px 10px;
+            border-radius: 8px;
+            max-width: 90%;
+        }
+        .user-msg {
+            background: #007bff;
+            color: #fff;
+            margin-left: auto;
+        }
+        .ai-msg {
+            background: #ffffff;
+            border: 1px solid #ced4da;
+            margin-right: auto;
+        }
+        .sim-input {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .sim-prompt {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+            font-size: 1em;
+        }
+        footer { text-align: center; margin-top: 40px; padding: 20px; color: #aaa; max-width: 1000px; margin-left: auto; margin-right: auto; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Μηχανική προτροπών: Πληροφορική Α' Γυμνασίου</h1>
+        <div class="subtitle">
+            Καινοτόμος Δράση Πληροφορικής Α΄ Γυμνασίου Π.Σ.Π.Θ.
+        </div>
+        <p>Μάθε πώς να δημιουργείς αποτελεσματικές προτροπές για AI με διασκεδαστικό τρόπο</p>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="openTab('theory')">📚 Θεωρία</button>
+            <button class="tab-btn" onclick="openTab('examples')">💡 Παραδείγματα</button>
+			<button class="tab-btn" onclick="openTab('simulator')">🤖 Προσομοιωτής</button>
+        </div>
+        <!--Καρτέλα "Θεωρία"-->
+		<div id="theory" class="tab-content active">
+            <h2>α) Τι είναι η Μηχανική Προτροπών;</h2>
+            <p>Η <strong>Μηχανική Προτροπών (Prompt Engineering)</strong> είναι η τέχνη να γράφεις σαφείς και έξυπνες οδηγίες σε εργαλεία Τεχνητής Νοημοσύνης. Στόχος είναι να παίρνεις <em>ακριβώς</em> αυτό που θέλεις.</p>
+            
+            <h3>Γιατί είναι σημαντική;</h3>
+            <ul>
+                <li><strong>Κριτική σκέψη:</strong> Σε αναγκάζει να σκεφτείς πριν "μιλήσεις" στην ΑΙ</li>
+                <li><strong>Συντακτική ακρίβεια:</strong> Μαθαίνεις να εκφράζεσαι ξεκάθαρα</li>
+                <li><strong>Ψηφιακός εγγραμματισμός:</strong> Χρησιμοποιείς σωστά την τεχνολογία</li>
+            </ul>
+
+            <h2>β) Πότε μια προτροπή είναι καλή;</h2>
+            <p>Μια προτροπή είναι <strong>καλή και αποτελεσματική</strong> όταν:</p>
+            <ul>
+                <li>Δίνει <strong>σαφή και συγκεκριμένη</strong> απάντηση</li>
+                <li>Ταιριάζει στο <strong>κοινό και σκοπό</strong> σου</li>
+                <li>Αποφεύγει <strong>ασάφειες και διπλές ερμηνείες</strong></li>
+                <li>Οδηγεί σε <strong>χρήσιμα και πρακτικά</strong> αποτελέσματα</li>
+            </ul>
+
+            <h2>γ) Δομή καλής προτροπής: 5W & 1H</h2>
+            <p>Χρησιμοποίησε το <strong>μοντέλο των 5W & 1H</strong> (το εργαλείο των δημοσιογράφων):</p>
+            
+        <div class="w5h">
+            <div class="w-item">
+                <h3>👤 Who (Ποιος)</h3>
+                <p><strong>Ποιο ρόλο παίζει το AI;</strong><br><em>"Λειτούργησε ως περιβαλλοντολόγος"</em></p>
+            </div>
+            <div class="w-item">
+                <h3>🎯 What (Τι)</h3>
+                <p><strong>Τι ακριβώς θέλουμε;</strong><br><em>"Γράψε ένα άρθρο για την κλιματική αλλαγή"</em></p>
+            </div>
+            <div class="w-item">
+                <h3>📍 Where (Πού)</h3>
+                <p><strong>Πού θα χρησιμοποιηθεί το κείμενο;</strong><br><em>"για την σχολική εφημερίδα"</em></p>
+            </div>
+            <div class="w-item">
+                <h3>⏰ When (Πότε)</h3>
+                <p><strong>Υπάρχει χρονικό πλαίσιο;</strong><br><em>"σχετικά με τις επιπτώσεις σήμερα"</em></p>
+            </div>
+            <div class="w-item">
+                <h3>💡 Why (Γιατί)</h3>
+                <p><strong>Ποιος είναι ο στόχος;</strong><br><em>"Στόχος είναι να ευαισθητοποιήσεις τους συμμαθητές σου"</em></p>
+            </div>
+            <div class="w-item">
+                <h3>✨ How (Πώς)</h3>
+                <p><strong>Τι ύφος και μορφή θέλουμε;</strong><br><em>"Γράψε το σε 3 παραγράφους με απλό ύφος"</em></p>
+            </div>
+        </div>
+		</div>
+		
+		<!--Καρτέλα "Παραδείγματα"-->
+		<div id="examples" class="tab-content">
+            <h2>Πρακτικά Παραδείγματα</h2>
+            
+            <div class="example-section">
+                <h3>α) Περίπτωση 1η: Εξήγηση έννοιας</h3>
+                <div class="example-bad">
+                    <strong>❌ Κακή:</strong> "Τι είναι δεδομένο;"
+                </div>
+                <div class="example-good">
+                    <strong>✅ Καλή (5W1H):</strong><br>
+                    "Είσαι δάσκαλος Πληροφορικής Α' Γυμνασίου (Who). Εξήγησε τι είναι δεδομένο στην Πληροφορική (What), για μαθητές 13 ετών (Where). Στόχος να το καταλάβουν εύκολα (Why). Χρησιμοποίησε απλή γλώσσα και παράδειγμα από καθημερινή ζωή (How)."
+                </div>
+            </div>
+
+            <div class="example-section">
+                <h3>β) Περίπτωση 2η: Σύγκριση εννοιών, κατηγοριών, διαφορών κλπ.</h3>
+                <div class="example-bad">
+                    <strong>❌ Κακή:</strong> "Διαφορά δεδομένου και πληροφορίας;"
+                </div>
+                <div class="example-good">
+                    <strong>✅ Καλή (5W1H):</strong><br>
+                    "Είσαι καθηγητής Πληροφορικής (Who). Σύγκρινε δεδομένο και πληροφορία και πώς μετατρέπεται το πρώτο στο δεύτερο (What), για παρουσίαση στην τάξη (Where). Στόχος κατανόηση μαθητών 13 ετών (Why). Χρησιμοποίησε αναλογία μαγειρικής (How)."
+                </div>
+            </div>
+
+            <div class="example-section">
+                <h3>γ) Περίπτωση 3η: Κατηγοριοποίηση/ομαδοποίηση</h3>
+                <div class="example-bad">
+                    <strong>❌ Κακή:</strong> "Παραδείγματα δεδομένων και πληροφοριών."
+                </div>
+                <div class="example-good">
+                    <strong>✅ Καλή (5W1H):</strong><br>
+                    "Είσαι εκπαιδευτικός (Who). Δώσε 5 παραδείγματα δεδομένων και 5 πληροφοριών από Πληροφορική (What), για μάθημα Α' Γυμνασίου (Where). Στόχος διαχωρισμός εννοιών (Why). Παρουσίασε σε πίνακα (How)."
+                </div>
+            </div>
+
+            <div class="example-section">
+                <h3>δ) Περίπτωση 4η: Quiz για αυτοέλεγχο</h3>
+                <div class="example-bad">
+                    <strong>❌ Κακή:</strong> "Φτιάξε quiz για δεδομένα."
+                </div>
+                <div class="example-good">
+                    <strong>✅ Καλή (5W1H):</strong><br>
+                    "Είσαι δάσκαλος Πληροφορικής (Who). Δημιούργησε 5 ερωτήσεις πολλαπλής επιλογής για δεδομένα/πληροφορίες (What), για Α' Γυμνασίου (Where). Στόχος αξιολόγηση κατανόησης (Why). Με 4 επιλογές και σωστή απάντηση (How)."
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <button onclick="createMyPrompt()">✨ Δημιούργησε τη Δική σου Προτροπή!</button>
+            </div>
+		</div>
+		
+		<!--Καρτέλα "Προσομοιωτής"-->
+		<div id="simulator" class="tab-content">
+		<h1>🤖 Προσομοιωτής AI Προτροπών</h1>
+		<p class="subtitle">
+			Γράψε την προτροπή σου, δες μια ενδεικτική απάντηση AI και λάβε ανατροφοδότηση για την ποιότητα της προτροπής.
+		</p>
+
+		<div class="simulator">
+			<div class="sim-chat" id="chatBox">
+				<!--<div class="sim-message ai-msg"> -->
+				<div class="message ai-message">
+				    <strong>AI:</strong> Καλώς ήρθες στον προσομοιωτή Μηχανικής Προτροπών!<br>
+					Γράψε μια προτροπή στο πλαίσιο κάτω και πάτησε «Αποστολή».
+				</div>
+			</div>
+
+			<div class="sim-input">
+				<textarea id="promptInput" class="sim-prompt" rows="3"
+						  placeholder="Π.χ. Είσαι δάσκαλος Πληροφορικής Α' Γυμνασίου. Εξήγησε τι είναι δεδομένο και τι πληροφορία, με ένα απλό παράδειγμα για μαθητές 13 ετών.">
+				</textarea>
+				<!--<button onclick="handlePrompt()">Αποστολή</button> -->
+				<div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button onclick="sendPrompt()">Αποστολή</button>
+                    <button class="reset-btn" onclick="clearChat()">Καθαρισμός</button>
+                </div>
+			</div>
+
+			<div class="score" id="scoreBox"></div>
+
+			<div class="criteria">
+				<h3>Κριτήρια αξιολόγησης (5W & 1H)</h3>
+				<ul>
+					<li><strong>Who:</strong> Όρισε ρόλο στο AI (π.χ. δάσκαλος, περιβαλλοντολόγος).</li>
+					<li><strong>What:</strong> Πες ξεκάθαρα τι θέλεις να κάνει.</li>
+					<li><strong>Where:</strong> Ανέφερε πού/για ποιο πλαίσιο θα χρησιμοποιηθεί.</li>
+					<li><strong>When:</strong> Δώσε χρονικό/ποσοτικό πλαίσιο (μήκος, σήμερα κτλ.).</li>
+					<li><strong>Why:</strong> Εξήγησε τον στόχο (γιατί το ζητάς).</li>
+					<li><strong>How:</strong> Περιέγραψε ύφος και μορφή (π.χ. απλό, πίνακας, παράγραφοι).</li>
+				</ul>
+				<p class="hint">Δοκίμασε να βελτιώσεις την προτροπή σου μέχρι να πάρεις «Εξαιρετική» βαθμολογία!</p>
+			</div>
+		</div>
+	</div>
+	
+	</div>
+
+    <footer style="text-align: center; padding: 20px; color: #fff; border-top: 1px solid #eee; margin-top: 40px;">
+		<p> Δημιουργία © 2026 <strong>teacher </strong> IT<br>
+			Αυτό το έργο διατίθεται με την άδεια <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>
+			<!--<img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"</a>-->
+		</p>		
+    </footer>
+
+    <script>
+        function openTab(tabName) {
+            // Tab buttons
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Tab content
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function createMyPrompt() {
+            const inputs = [
+                {label: 'Ποιος (Who): Ποιο ρόλο παίζει το AI;', key: 'who'},
+                {label: 'Τι (What): Τι ακριβώς θέλεις;', key: 'what'},
+                {label: 'Πού (Where): Πού θα χρησιμοποιηθεί;', key: 'where'},
+                {label: 'Πότε (When): Χρονικό πλαίσιο;', key: 'when'},
+                {label: 'Γιατί (Why): Ποιος ο στόχος;', key: 'why'},
+                {label: 'Πώς (How): Ύφος και μορφή;', key: 'how'}
+            ];
+            
+            let myPrompt = '';
+            inputs.forEach(input => {
+                const value = prompt(input.label);
+                if (value) {
+                    myPrompt += `(${input.key.toUpperCase()}) ${value}. `;
+                }
+            });
+            
+            if (myPrompt) {
+                navigator.clipboard.writeText(myPrompt).then(() => {
+                    alert('✅ Η προτροπή σου δημιουργήθηκε και αντιγράφηκε!\n\n' + myPrompt);
+                });
+            }
+        }
+		function sendPrompt() {
+            const input = document.getElementById('promptInput');
+            const promptText = input.value.trim();
+            
+            if (!promptText) {
+                alert('Παρακαλώ γράψε μια προτροπή!');
+                return;
+            }
+            
+            const chatBox = document.getElementById('chatBox');
+            
+            // Προσθήκη μηνύματος χρήστη
+            const userMsg = document.createElement('div');
+            userMsg.className = 'sim-message user-msg';
+            userMsg.innerHTML = '<strong>Εγώ:</strong> ' + promptText;
+            chatBox.appendChild(userMsg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Δείχνουμε "πληκτρολογεί..."
+            const typingMsg = document.createElement('div');
+            typingMsg.className = 'sim-message ai-msg';
+            typingMsg.innerHTML = '<em>AI: Αναλύω την προτροπή σου...</em>';
+            chatBox.appendChild(typingMsg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // Ανάλυση προτροπής
+            const analysis = analyzePrompt(promptText);
+            
+            // Δημιουργία απάντησης AI με μικρή καθυστέρηση
+            setTimeout(() => {
+                typingMsg.remove();
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'sim-message ai-msg';
+                aiMsg.innerHTML = generateAIResponse(promptText, analysis);
+                chatBox.appendChild(aiMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 900);
+            
+            // Καθαρισμός input
+            input.value = '';
+        }
+
+        function clearChat() {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML = '<div class="sim-message ai-msg"><strong>AI:</strong> Το ιστορικό καθαρίστηκε. Γράψε νέα προτροπή!</div>';
+        }
+		
+		function analyzePrompt(prompt) {
+            const analysis = {
+                hasWho: false,
+                hasWhat: false,
+                hasWhere: false,
+                hasWhen: false,
+                hasWhy: false,
+                hasHow: false,
+                score: 0,
+                suggestions: []
+            };
+            
+            // WHO – Ρόλος του AI
+            if (prompt.match(/είσαι|ρόλος|δράσε|μίλησε|ως\s+\w+|λειτούργησε|δάσκαλ|καθηγητ|εκπαιδευτ|ειδικ|εμπειρογνώμ/i)) {
+                analysis.hasWho = true;
+                analysis.score += 17;
+            } else {
+                analysis.suggestions.push("👤 <strong>Who:</strong> Όρισε ρόλο στο AI (π.χ. «Είσαι δάσκαλος Πληροφορικής»)");
+            }
+            
+            // WHAT – Συγκεκριμένη εργασία
+            if (prompt.match(/εξήγησ|σύγκρινε|περίγραψε|δημιούργησε|γράψε|φτιάξε|αναλυσε|κατάρτισε|δώσε|παρουσίασε/i)) {
+                analysis.hasWhat = true;
+                analysis.score += 17;
+            } else {
+                analysis.suggestions.push("🎯 <strong>What:</strong> Πες ξεκάθαρα τι θέλεις (π.χ. «Εξήγησε τι είναι δεδομένο»)");
+            }
+            
+            // WHERE – Πλαίσιο χρήσης
+            if (prompt.match(/γυμνασίου|λυκείου|τάξη|μάθημα|σχολ|παρουσίαση|εφημερίδα|έκθεση|project/i)) {
+                analysis.hasWhere = true;
+                analysis.score += 17;
+            } else {
+                analysis.suggestions.push("📍 <strong>Where:</strong> Ανέφερε πού θα χρησιμοποιηθεί (π.χ. «για μάθημα Α΄ Γυμνασίου»)");
+            }
+
+            // WHEN – Χρονικό/ποσοτικό πλαίσιο
+            if (prompt.match(/σήμερα|τώρα|εντός|εβδομάδα|καθημεριν|\d+\s*(λέξ|παράγραφ|ερωτ|παραδείγμ|σημε|βήμα)/i)) {
+                analysis.hasWhen = true;
+                analysis.score += 16;
+            } else {
+                analysis.suggestions.push("⏰ <strong>When:</strong> Δώσε ποσοτικό/χρονικό πλαίσιο (π.χ. «5 παραδείγματα», «σύντομα»)");
+            }
+
+            // WHY – Στόχος/σκοπός
+            if (prompt.match(/στόχος|σκοπός|για\s+να|ώστε|επειδή|θέλω να καταλάβ|να κατανοήσ|να μάθ|να ευαισθητ/i)) {
+                analysis.hasWhy = true;
+                analysis.score += 17;
+            } else {
+                analysis.suggestions.push("💡 <strong>Why:</strong> Εξήγησε τον στόχο (π.χ. «Στόχος να το καταλάβουν οι μαθητές»)");
+            }
+            
+            // HOW – Μορφή/ύφος
+            if (prompt.match(/πίνακας|λίστα|παράγραφ|bullet|βήματα|προτάσεις|απλ[άή]\s+γλώσσ|ύφος|μορφή|παραδείγματ|αναλογ/i)) {
+                analysis.hasHow = true;
+                analysis.score += 16;
+            } else {
+                analysis.suggestions.push("✨ <strong>How:</strong> Περίγραψε τη μορφή/ύφος (π.χ. «σε πίνακα», «με απλή γλώσσα»)");
+            }
+            
+            return analysis;
+        }
+		function generateAIResponse(prompt, analysis) {
+            let response = '<div style="margin-bottom: 15px;">';
+            
+            // Γενική απάντηση βάσει θέματος
+            if (prompt.match(/περιφερειακ|συσκευ.*εισ|συσκευ.*εξ/i)) {
+                response += '<p><strong>📋 Ενδεικτική Απάντηση AI:</strong></p>';
+                response += '<p><strong>Συσκευές Εισόδου:</strong> Εισάγουν δεδομένα στον υπολογιστή. Παραδείγματα: πληκτρολόγιο, ποντίκι, σαρωτής, μικρόφωνο, webcam.<br><strong>Συσκευές Εξόδου:</strong> Εμφανίζουν αποτελέσματα. Παραδείγματα: οθόνη, εκτυπωτής, ηχεία.<br><strong>Εισόδου-Εξόδου:</strong> Στέλνουν ΚΑΙ δέχονται δεδομένα. Παραδείγματα: οθόνη αφής, smartphone.</p>';
+            } else if (prompt.match(/hdd|ssd|σκληρ.*δίσκ/i)) {
+                response += '<p><strong>📋 Ενδεικτική Απάντηση AI:</strong></p>';
+                response += '<p><strong>HDD (Hard Disk Drive):</strong> Χρησιμοποιεί περιστρεφόμενους μαγνητικούς δίσκους. Πλεονεκτήματα: μεγάλη χωρητικότητα, χαμηλό κόστος. Μειονεκτήματα: αργό, θόρυβος.<br><strong>SSD (Solid State Drive):</strong> Flash memory, χωρίς κινητά μέρη. Πλεονεκτήματα: πολύ γρήγορο, αθόρυβο. Μειονεκτήματα: ακριβότερο.</p>';
+            } else if (prompt.match(/ram/i)) {
+                response += '<p><strong>📋 Ενδεικτική Απάντηση AI:</strong></p>';
+                response += '<p>Η <strong>RAM</strong> (Random Access Memory) είναι η <em>προσωρινή</em> μνήμη του υπολογιστή. Αποθηκεύει δεδομένα που χρησιμοποιούνται αυτή τη στιγμή. Μειονέκτημα: τα περιεχόμενά της χάνονται όταν κλείσει ο υπολογιστής — γι\' αυτό χρειαζόμαστε μόνιμα αποθηκευτικά μέσα.</p>';
+            } else if (prompt.match(/υπερυπολογιστ|mainframe|είδη.*υπολογιστ/i)) {
+                response += '<p><strong>📋 Ενδεικτική Απάντηση AI:</strong></p>';
+                response += '<p>1. <strong>Υπερυπολογιστές:</strong> Οι πιο ισχυροί, για επιστημονικές προσομοιώσεις.<br>2. <strong>Mainframes:</strong> Για μεγάλες επιχειρήσεις και τράπεζες.<br>3. <strong>Προσωπικοί:</strong> Desktop, laptop, tablet.<br>4. <strong>Ενσωματωμένοι:</strong> Smartphones, παιχνιδομηχανές, GPS.</p>';
+            } else if (prompt.match(/αποθηκευτικ|cloud|usb|dvd/i)) {
+                response += '<p><strong>📋 Ενδεικτική Απάντηση AI:</strong></p>';
+                response += '<p>• <strong>HDD/SSD:</strong> Εσωτερικοί δίσκοι, μεγάλη χωρητικότητα<br>• <strong>USB Flash Drive:</strong> Φορητό, για μεταφορά αρχείων<br>• <strong>DVD/Blu-ray:</strong> Οπτικά μέσα για backup<br>• <strong>Cloud Storage:</strong> Απομακρυσμένη αποθήκευση, χρειάζεται Διαδίκτυο</p>';
+            } else if (prompt.match(/υλικό|hardware/i)) {
+                response += '<p><strong>📋 Ενδεικτική Απάντηση AI:</strong></p>';
+                response += '<p>Το <strong>υλικό (Hardware)</strong> είναι τα φυσικά μέρη του υπολογιστή — αυτά που βλέπουμε και αγγίζουμε: Κεντρική Μονάδα (CPU, RAM), περιφερειακές συσκευές (πληκτρολόγιο, οθόνη) και αποθηκευτικά μέσα (HDD, SSD).</p>';
+            } else if (prompt.match(/δεδομέν|πληροφορ/i)) {
+                response += '<p><strong>📋 Ενδεικτική Απάντηση AI:</strong></p>';
+                response += '<p>Τα <strong>δεδομένα</strong> είναι ακατέργαστα γεγονότα χωρίς νόημα (π.χ. «25»). Η <strong>πληροφορία</strong> είναι τα δεδομένα αφού επεξεργαστούν και αποκτήσουν νόημα (π.χ. «η θερμοκρασία είναι 25°C»). Η επεξεργασία δεδομένων → πληροφορία είναι ο βασικός κύκλος της Πληροφορικής.</p>';
+            } else {
+                response += '<p><strong>📋 Ενδεικτική Απάντηση AI:</strong></p>';
+                response += '<p>Η προτροπή σου έγινε δεκτή! Για να πάρεις πιο ακριβή και χρήσιμη απάντηση, δοκίμασε να συμπληρώσεις τα στοιχεία 5W & 1H στην προτροπή σου (δες πίνακα κριτηρίων παρακάτω).</p>';
+            }
+            
+            response += '</div>';
+            
+            // ── Αξιολόγηση προτροπής ──
+            const pct = analysis.score;
+            const barColor = pct >= 85 ? '#28a745' : pct >= 50 ? '#fd7e14' : '#dc3545';
+            const verdict = pct >= 85 ? '🏆 Εξαιρετική!' : pct >= 67 ? '👍 Καλή' : pct >= 34 ? '⚠️ Βελτιώσιμη' : '❌ Αδύνατη';
+
+            response += '<div style="margin-top: 12px; padding: 14px; background: #f0f4ff; border-radius: 8px; border-left: 4px solid #667eea; font-size:0.93em;">';
+            response += '<p style="margin:0 0 8px 0;"><strong>📊 Αξιολόγηση Προτροπής: ' + pct + '/100 &nbsp;—&nbsp; ' + verdict + '</strong></p>';
+
+            // Progress bar
+            response += '<div style="background:#ddd;border-radius:6px;height:10px;margin-bottom:12px;">';
+            response += '<div style="width:' + pct + '%;background:' + barColor + ';height:10px;border-radius:6px;transition:width 0.6s;"></div></div>';
+
+            // 6 κριτήρια
+            const criteria = [
+                { key: 'hasWho',   label: '👤 Who — Ρόλος AI' },
+                { key: 'hasWhat',  label: '🎯 What — Συγκεκριμένη Εργασία' },
+                { key: 'hasWhere', label: '📍 Where — Πλαίσιο Χρήσης' },
+                { key: 'hasWhen',  label: '⏰ When — Ποσοτικό/Χρονικό Πλαίσιο' },
+                { key: 'hasWhy',   label: '💡 Why — Στόχος' },
+                { key: 'hasHow',   label: '✨ How — Μορφή/Ύφος' },
+            ];
+
+            response += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:10px;">';
+            criteria.forEach(c => {
+                const ok = analysis[c.key];
+                response += '<div style="color:' + (ok ? '#1a7a1a' : '#c0392b') + ';">' + (ok ? '✅' : '☐') + ' ' + c.label + '</div>';
+            });
+            response += '</div>';
+
+            if (analysis.suggestions.length > 0) {
+                response += '<p style="margin:8px 0 4px 0;"><strong>💡 Τι λείπει — Προτάσεις Βελτίωσης:</strong></p><ul style="margin:4px 0 0 18px;padding:0;">';
+                analysis.suggestions.forEach(s => { response += '<li style="margin-bottom:4px;">' + s + '</li>'; });
+                response += '</ul>';
+            } else {
+                response += '<p style="margin-top:8px;color:#1a7a1a;"><strong>🎉 Τέλεια! Η προτροπή σου περιέχει και τα 6 στοιχεία 5W & 1H!</strong></p>';
+            }
+
+            response += '</div>';
+            return response;
+        }
+		// Enter για αποστολή
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('promptInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    sendPrompt();
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
