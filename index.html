@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Μηχανική προτροπών: Πληροφορική Γυμνασίου</title>
+    <title>Μηχανική προτροπών</title>
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -170,7 +170,7 @@
         <div class="tab-buttons">
             <button class="tab-btn active" onclick="openTab('theory')">📚 Θεωρία</button>
             <button class="tab-btn" onclick="openTab('examples')">💡 Παραδείγματα</button>
-			<button class="tab-btn" onclick="openTab('simulator')">🤖 Προσομοιωτής</button>
+			<!--<button class="tab-btn" onclick="openTab('simulator')">🤖 Προσομοιωτής</button>-->
         </div>
         <!--Καρτέλα "Θεωρία"-->
 		<div id="theory" class="tab-content active">
@@ -278,7 +278,7 @@
 		</div>
 		
 		<!--Καρτέλα "Προσομοιωτής"-->
-		<div id="simulator" class="tab-content">
+	<!-- 	<div id="simulator" class="tab-content">
 		<h1>🤖 Προσομοιωτής AI Προτροπών</h1>
 		<p class="subtitle">
 			Γράψε την προτροπή σου, δες μια ενδεικτική απάντηση AI και λάβε ανατροφοδότηση για την ποιότητα της προτροπής.
@@ -286,7 +286,7 @@
 
 		<div class="simulator">
 			<div class="sim-chat" id="chatBox">
-				<!--<div class="sim-message ai-msg"> -->
+				
 				<div class="message ai-message">
 				    <strong>AI:</strong> Καλώς ήρθες στον προσομοιωτή Μηχανικής Προτροπών!<br>
 					Γράψε μια προτροπή στο πλαίσιο κάτω και πάτησε «Αποστολή».
@@ -297,7 +297,7 @@
 				<textarea id="promptInput" class="sim-prompt" rows="3"
 						  placeholder="Π.χ. Είσαι δάσκαλος Πληροφορικής Α' Γυμνασίου. Εξήγησε τι είναι δεδομένο και τι πληροφορία, με ένα απλό παράδειγμα για μαθητές 13 ετών.">
 				</textarea>
-				<!--<button onclick="handlePrompt()">Αποστολή</button> -->
+				
 				<div style="display: flex; flex-direction: column; gap: 10px;">
                     <button onclick="sendPrompt()">Αποστολή</button>
                     <button class="reset-btn" onclick="clearChat()">Καθαρισμός</button>
@@ -320,7 +320,7 @@
 			</div>
 		</div>
 	</div>
-	
+	 -->
 	</div>
 
     <footer style="text-align: center; padding: 20px; color: #fff; border-top: 1px solid #eee; margin-top: 40px;">
